@@ -84,11 +84,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                   validator: (email) {
-                    // 5 install package email_validator
                     if (email != null && !EmailValidator.validate(email)) {
                       return 'Enter a valid email';
                     } else {
-                      return null; //form is valid
+                      return null; 
                     }
                   },
                 ),
