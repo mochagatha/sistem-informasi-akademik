@@ -28,114 +28,118 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           const CustomAppBar(),
           Container(
-            height: screenHeight - 120,
-            width: MediaQuery.of(context).size.width,
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(30),
-                topRight: Radius.circular(30),
+              height: screenHeight - 120,
+              width: MediaQuery.of(context).size.width,
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(30),
+                  topRight: Radius.circular(30),
+                ),
               ),
-            ),
-            child: ListView.builder(
-              itemCount: modelview.newsData['data'].length,
-              itemBuilder: (context, index) {
-                final berita = modelview.newsData['data'][index];
-                final gambar = berita['attributes']['gambar'];
-                final judul = berita['attributes']['judul'];
-                final deskripsi = berita['attributes']['deskripsi'] ?? "";
-                return ListTile(
-                  title: Container(
-                    height: 250.0,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: NetworkImage(gambar),
-                        fit: BoxFit.cover,
-                      ),
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(
-                          8.0,
-                        ),
-                      ),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Colors.grey,
-                          blurRadius: 5,
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ClipRRect(
-                          borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(8),
-                            topRight: Radius.circular(8),
+              child: Consumer<BeritaViewModel>(
+                  builder: (context, contactModel, child) {
+                if (contactModel.loading) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                return ListView.builder(
+                  itemCount: modelview.newsData['data'].length,
+                  itemBuilder: (context, index) {
+                    final berita = modelview.newsData['data'][index];
+                    final gambar = berita['attributes']['gambar'];
+                    final judul = berita['attributes']['judul'];
+                    final deskripsi = berita['attributes']['deskripsi'] ?? "";
+                    return ListTile(
+                      title: Container(
+                        height: 250.0,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: NetworkImage(gambar),
+                            fit: BoxFit.cover,
                           ),
-                          child: Container(
-                            height: 113.0,
-                            decoration: const BoxDecoration(
-                              color: Color.fromARGB(0, 255, 153, 0),
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(
+                              8.0,
                             ),
                           ),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Colors.grey,
+                              blurRadius: 5,
+                            ),
+                          ],
                         ),
-                        Container(
-                          color: const Color.fromARGB(185, 255, 255, 255),
-                          padding: const EdgeInsets.all(8),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                _truncateText(judul, 30),
-                                style: const TextStyle(
-                                  fontSize: 23,
-                                  fontWeight: FontWeight.w400,
-                                ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const ClipRRect(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(8),
+                                topRight: Radius.circular(8),
                               ),
-                              const SizedBox(height: 10),
-                              Text(
-                                _truncateText(deskripsi, 85),
-                                style: const TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w400,
-                                ),
+                              child: SizedBox(
+                                height: 125.0,
                               ),
-                              ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFF2DBAB1),
-                                  elevation: 1,
-                                ),
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => DetailBerita(
-                                          judul: judul,
-                                          gambar: gambar,
-                                          deskripsi: deskripsi),
+                            ),
+                            Container(
+                              color: const Color.fromARGB(185, 255, 255, 255),
+                              padding: const EdgeInsets.all(8),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    _truncateText(judul, 30),
+                                    style: const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w400,
                                     ),
-                                  );
-                                },
-                                child: const Row(
-                                  children: [
-                                    Text("Selanjutnya"),
-                                    Icon(
-                                      Icons.arrow_forward,
-                                      size: 18.0,
+                                  ),
+                                  const SizedBox(height: 10),
+                                  Text(
+                                    _truncateText(deskripsi, 85),
+                                    style: const TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w400,
                                     ),
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
+                                  ),
+                                  ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: const Color(0xFF2DBAB1),
+                                      elevation: 1,
+                                    ),
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => DetailBerita(
+                                              judul: judul,
+                                              gambar: gambar,
+                                              deskripsi: deskripsi),
+                                        ),
+                                      );
+                                    },
+                                    child: const Row(
+                                      children: [
+                                        Text("Selanjutnya"),
+                                        Icon(
+                                          Icons.arrow_forward,
+                                          size: 15.0,
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    );
+                  },
                 );
-              },
-            ),
-          )
+              }))
         ],
       ),
     )));

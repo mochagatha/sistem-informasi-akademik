@@ -13,10 +13,13 @@ class SiswaViewModel with ChangeNotifier {
   final TextEditingController inputUas = TextEditingController();
   Map<String, dynamic> studentData = {};
   Map<String, dynamic> studentDataID = {};
+  bool isLoading = true;
   SiswaViewModel() {
     dataSiswa();
   }
   Future<void> dataSiswa() async {
+    isLoading = true;
+    notifyListeners();
     try {
       final options = BaseOptions(
         baseUrl: Urls.baseUrl,
@@ -34,6 +37,7 @@ class SiswaViewModel with ChangeNotifier {
     } catch (error) {
       debugPrint('Terjadi kesalahan saat mengambil data: $error');
     }
+    isLoading = false;
     notifyListeners();
   }
 

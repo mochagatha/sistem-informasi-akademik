@@ -4,12 +4,17 @@ import 'package:mini_project_agatha/utils/urls.dart';
 
 class BeritaViewModel with ChangeNotifier {
   Map<String, dynamic> newsData = {};
+  bool loading = true;
   final Dio _dio = Dio();
+
 
   BeritaViewModel() {
     berita();
+
   }
   Future<void> berita() async {
+     loading = true;
+  notifyListeners();
     try {
       final response = await _dio.get(Urls.baseUrl + Urls.berita);
 
@@ -22,6 +27,7 @@ class BeritaViewModel with ChangeNotifier {
     } catch (error) {
       debugPrint('Terjadi kesalahan saat mengambil data: $error');
     }
-    notifyListeners();
+      loading = false;
+  notifyListeners();
   }
 }

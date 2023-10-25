@@ -45,6 +45,11 @@ class _DaftarSiswaState extends State<DaftarSiswa> {
                 ),
                 child: Consumer<SiswaViewModel>(
                   builder: (context, contactModel, child) {
+                        if (contactModel.isLoading) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
                     return ListView.builder(
                       itemCount: modelview.studentData['data'].length,
                       itemBuilder: (context, index) {

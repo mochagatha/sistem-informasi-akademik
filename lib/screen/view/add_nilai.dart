@@ -1,6 +1,7 @@
 // ignore_for_file: no_logic_in_create_state, use_key_in_widget_constructors, sort_child_properties_last
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mini_project_agatha/screen/view_model/view_model_siswa.dart';
 import 'package:provider/provider.dart';
 import '../view_model/pdf.dart';
@@ -90,6 +91,10 @@ class _AddNilaiState extends State<AddNilai> {
                             ),
                             const Text("Ulangan Harian 1"),
                             TextFormField(
+                              keyboardType: TextInputType.phone,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.digitsOnly
+                              ],
                               enabled: modelview.isEditMode,
                               controller: modelview.inputUh1,
                               decoration: InputDecoration(
@@ -124,6 +129,10 @@ class _AddNilaiState extends State<AddNilai> {
                             const SizedBox(height: 10),
                             const Text("Ulangan Harian 2"),
                             TextFormField(
+                              keyboardType: TextInputType.phone,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.digitsOnly
+                              ],
                               enabled: modelview.isEditMode,
                               controller: modelview.inputUh2,
                               decoration: InputDecoration(
@@ -158,6 +167,10 @@ class _AddNilaiState extends State<AddNilai> {
                             const SizedBox(height: 10),
                             const Text("Ulangan Harian 3"),
                             TextFormField(
+                              keyboardType: TextInputType.phone,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.digitsOnly
+                              ],
                               enabled: modelview.isEditMode,
                               controller: modelview.inputUh3,
                               decoration: InputDecoration(
@@ -192,6 +205,10 @@ class _AddNilaiState extends State<AddNilai> {
                             const SizedBox(height: 10),
                             const Text("Ulangan Tengah Semester"),
                             TextFormField(
+                              keyboardType: TextInputType.phone,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.digitsOnly
+                              ],
                               enabled: modelview.isEditMode,
                               controller: modelview.inputUts,
                               decoration: InputDecoration(
@@ -226,6 +243,10 @@ class _AddNilaiState extends State<AddNilai> {
                             const SizedBox(height: 10),
                             const Text("Ulangan Akhir Semester"),
                             TextFormField(
+                              keyboardType: TextInputType.phone,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.digitsOnly
+                              ],
                               enabled: modelview.isEditMode,
                               controller: modelview.inputUas,
                               decoration: InputDecoration(
@@ -261,17 +282,17 @@ class _AddNilaiState extends State<AddNilai> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                 if (!modelview.isEditMode)
-                                ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.blueGrey,
+                                if (!modelview.isEditMode)
+                                  ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.blueGrey,
+                                    ),
+                                    onPressed: () async {
+                                      await printPDF(
+                                          nama, uh1, uh2, uh3, uts, uas);
+                                    },
+                                    child: const Text("Cetak Nilai"),
                                   ),
-                                  onPressed: () async {
-                                    await printPDF(
-                                        nama, uh1, uh2, uh3, uts, uas);
-                                  },
-                                  child: const Text("Cetak Nilai"),
-                                ),
                                 const SizedBox(width: 10),
                                 Row(
                                   children: [
