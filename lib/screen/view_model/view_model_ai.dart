@@ -5,9 +5,10 @@ class AiViewModel with ChangeNotifier {
   final TextEditingController ai = TextEditingController();
   List<dynamic> dataAi = [];
   final Dio _dio = Dio();
+   bool isLoading = false;
 
   Future<void> makeApiRequest(BuildContext context) async {
-    const authToken = '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';
+    const authToken = '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';
 
     _dio.options = BaseOptions(
       baseUrl: 'https://api.openai.com/v1/',
@@ -15,6 +16,9 @@ class AiViewModel with ChangeNotifier {
         'Authorization': 'Bearer $authToken',
       },
     );
+    
+  isLoading = true;
+  notifyListeners();
     try {
       final response = await _dio.post(
         'completions',
@@ -29,6 +33,8 @@ class AiViewModel with ChangeNotifier {
           "presence_penalty": 0,
         },
       );
+          isLoading = false; // Setelah permintaan selesai
+    notifyListeners();
       if (response.statusCode == 200) {
         final responseData = response.data;
         dataAi = responseData["choices"];

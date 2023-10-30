@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
+import '../../model/daftar_siswa_model.dart';
+import '../../service/data_siswa_service.dart';
 import '../../utils/urls.dart';
 
 class SiswaViewModel with ChangeNotifier {
@@ -14,6 +16,11 @@ class SiswaViewModel with ChangeNotifier {
   Map<String, dynamic> studentData = {};
   Map<String, dynamic> studentDataID = {};
   bool isLoading = true;
+  final formKey = GlobalKey<FormState>();
+
+
+  final service = SiswaApiService();
+   DaftarSiswaModel? siswaList;
   SiswaViewModel() {
     dataSiswa();
   }
@@ -21,21 +28,10 @@ class SiswaViewModel with ChangeNotifier {
     isLoading = true;
     notifyListeners();
     try {
-      final options = BaseOptions(
-        baseUrl: Urls.baseUrl,
-      );
-      _dio.options = options;
-
-      final response = await _dio.get(Urls.student);
-
-      if (response.statusCode == 200) {
-        final data = response.data;
-        studentData = data;
-      } else {
-        debugPrint('Gagal mengambil data. Status Code: ${response.statusCode}');
-      }
+      final data = await service.fetchDataSiswa();
+      siswaList = data;
     } catch (error) {
-      debugPrint('Terjadi kesalahan saat mengambil data: $error');
+       throw Exception('Gagal mengambil data dari API: $error');
     }
     isLoading = false;
     notifyListeners();
@@ -105,5 +101,14 @@ class SiswaViewModel with ChangeNotifier {
   void toggleEditMode() {
     isEditMode = !isEditMode;
     notifyListeners();
+  }
+    String? validateNilai(String value) {
+    if (value.isNotEmpty) {
+      final intValue = int.tryParse(value);
+      if (intValue == null || intValue < 0 || intValue > 100) {
+        return 'Masukkan angka antara 0 hingga 100';
+      }
+    }
+    return null;
   }
 }

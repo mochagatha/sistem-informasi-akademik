@@ -75,8 +75,9 @@ class _AddNilaiState extends State<AddNilai> {
                           ],
                         ),
                       ),
-                      const SizedBox(height: 50),
+                      const SizedBox(height: 30),
                       Form(
+                        key: modelview.formKey,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -125,6 +126,7 @@ class _AddNilaiState extends State<AddNilai> {
                                       const BorderSide(color: Colors.black),
                                 ),
                               ),
+                                 validator: (value) => modelview.validateNilai(value!),
                             ),
                             const SizedBox(height: 10),
                             const Text("Ulangan Harian 2"),
@@ -163,6 +165,7 @@ class _AddNilaiState extends State<AddNilai> {
                                       const BorderSide(color: Colors.black),
                                 ),
                               ),
+                              validator: (value) => modelview.validateNilai(value!),
                             ),
                             const SizedBox(height: 10),
                             const Text("Ulangan Harian 3"),
@@ -201,6 +204,7 @@ class _AddNilaiState extends State<AddNilai> {
                                       const BorderSide(color: Colors.black),
                                 ),
                               ),
+                                   validator: (value) => modelview.validateNilai(value!),
                             ),
                             const SizedBox(height: 10),
                             const Text("Ulangan Tengah Semester"),
@@ -239,6 +243,7 @@ class _AddNilaiState extends State<AddNilai> {
                                       const BorderSide(color: Colors.black),
                                 ),
                               ),
+                                   validator: (value) => modelview.validateNilai(value!),
                             ),
                             const SizedBox(height: 10),
                             const Text("Ulangan Akhir Semester"),
@@ -277,6 +282,7 @@ class _AddNilaiState extends State<AddNilai> {
                                       const BorderSide(color: Colors.black),
                                 ),
                               ),
+                                   validator: (value) => modelview.validateNilai(value!),
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -298,7 +304,10 @@ class _AddNilaiState extends State<AddNilai> {
                                   children: [
                                     ElevatedButton(
                                       onPressed: () {
-                                        modelview.toggleEditMode();
+                                        if (modelview.formKey.currentState!
+                                            .validate()) {
+                                          modelview.toggleEditMode();
+                                        }
                                       },
                                       child: Text(modelview.isEditMode
                                           ? "Batal"
@@ -316,22 +325,25 @@ class _AddNilaiState extends State<AddNilai> {
                                           backgroundColor: Colors.blueGrey,
                                         ),
                                         onPressed: () async {
-                                          modelview.addNilaiStudent(
-                                              widget.idSiswa,
-                                              uh1,
-                                              uh2,
-                                              uh3,
-                                              uts,
-                                              uas);
+                                          if (modelview.formKey.currentState!
+                                              .validate()) {
+                                            modelview.addNilaiStudent(
+                                                widget.idSiswa,
+                                                uh1,
+                                                uh2,
+                                                uh3,
+                                                uts,
+                                                uas);
 
-                                          modelview.inputUh1.clear();
-                                          modelview.inputUh2.clear();
-                                          modelview.inputUh3.clear();
-                                          modelview.inputUts.clear();
-                                          modelview.inputUas.clear();
+                                            modelview.inputUh1.clear();
+                                            modelview.inputUh2.clear();
+                                            modelview.inputUh3.clear();
+                                            modelview.inputUts.clear();
+                                            modelview.inputUas.clear();
 
-                                          await modelview.dataSiswa();
-                                          modelview.toggleEditMode();
+                                            await modelview.dataSiswa();
+                                            modelview.toggleEditMode();
+                                          }
                                         },
                                         child: const Text("Simpan"),
                                       ),

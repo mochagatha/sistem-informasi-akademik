@@ -111,6 +111,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                                   builder: (context) => const LoginScreen(),
                                 ),
                                 (route) => false);
+                                modelview.currentIndex = 1;
                           },
                         ),
                       ],

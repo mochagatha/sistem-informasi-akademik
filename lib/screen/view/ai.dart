@@ -1,5 +1,3 @@
-// ignore_for_file: camel_case_types, prefer_typing_uninitialized_variables, sort_child_properties_last
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../view_model/view_model_ai.dart';
@@ -59,20 +57,26 @@ class Ai extends StatelessWidget {
                               Consumer<AiViewModel>(
                                 builder: (context, contactModel, child) {
                                   return Expanded(
-                                    child: ListView.builder(
-                                      itemCount: modelview.dataAi.length,
-                                      itemBuilder: (context, index) {
-                                        return ListTile(
-                                          title: Text(
-                                            modelview.dataAi[index]['text'],
-                                            textAlign: TextAlign.justify,
-                                            style: const TextStyle(
-                                              color: Colors.white,
-                                            ),
+                                    child: contactModel.isLoading
+                                        ? const Center(
+                                            child:
+                                                CircularProgressIndicator(), // Menampilkan indikator progres saat isLoading adalah true
+                                          )
+                                        : ListView.builder(
+                                            itemCount: modelview.dataAi.length,
+                                            itemBuilder: (context, index) {
+                                              return ListTile(
+                                                title: Text(
+                                                  modelview.dataAi[index]
+                                                      ['text'],
+                                                  textAlign: TextAlign.justify,
+                                                  style: const TextStyle(
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                              );
+                                            },
                                           ),
-                                        );
-                                      },
-                                    ),
                                   );
                                 },
                               ),
@@ -81,23 +85,33 @@ class Ai extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 20),
                     Form(
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: TextFormField(
-                          controller: modelview.ai,
-                          decoration: const InputDecoration(
-                            labelStyle: TextStyle(
-                              color: Colors.blueGrey,
-                            ),
-                            enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Colors.blueGrey,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text("Apa yang ingin anda tanyakan?"),
+                            TextFormField(
+                              controller: modelview.ai,
+                              decoration: const InputDecoration(
+                                filled: true,
+                                fillColor: Color(0xFFFAF9F9),
+                                contentPadding: EdgeInsets.all(16),
+                                border: OutlineInputBorder(
+                                  borderSide:
+                                    BorderSide(color: Colors.black),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide:
+                                   BorderSide(color: Colors.black),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.black),
+                                ),
                               ),
                             ),
-                            helperText: "Apa yang ingin anda tanyakan?",
-                          ),
+                          ],
                         ),
                       ),
                     ),
@@ -106,20 +120,20 @@ class Ai extends StatelessWidget {
                         modelview.makeApiRequest(context);
                         modelview.ai.clear();
                       },
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            const Color(0xFF21ABA5)),
+                        shape: MaterialStateProperty.all<OutlinedBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16.0),
+                          ),
+                        ),
+                      ),
                       child: const Text(
                         'Submit',
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all<Color>(const Color(0xFF21ABA5)),
-                        shape: MaterialStateProperty.all<OutlinedBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16.0),
-                          ),
                         ),
                       ),
                     )

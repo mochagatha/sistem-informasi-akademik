@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:mini_project_agatha/screen/view_model/view_model_siswa.dart';
 import 'package:provider/provider.dart';
+import '../../service/data_siswa_service.dart';
 import 'add_nilai.dart';
 import 'custom_appbar.dart';
 
@@ -14,6 +15,7 @@ class DaftarSiswa extends StatefulWidget {
 }
 
 class _DaftarSiswaState extends State<DaftarSiswa> {
+  final service = SiswaApiService();
   late SiswaViewModel modelview;
   @override
   void initState() {
@@ -45,20 +47,17 @@ class _DaftarSiswaState extends State<DaftarSiswa> {
                 ),
                 child: Consumer<SiswaViewModel>(
                   builder: (context, contactModel, child) {
-                        if (contactModel.isLoading) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
+                    if (contactModel.isLoading) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
                     return ListView.builder(
-                      itemCount: modelview.studentData['data'].length,
+                      itemCount: modelview.siswaList!.data.length,
                       itemBuilder: (context, index) {
-                        final student = modelview.studentData['data'][index];
-                        final idSiswa = student['id'];
-                        final fotoProfile = student['attributes']
-                                ['foto_profile'] ??
-                            "https://assets-a1.kompasiana.com/items/album/2021/03/24/blank-profile-picture-973460-1280-605aadc08ede4874e1153a12.png?t=o&v=1200";
-                        final studentName = student['attributes']['nama_siswa'];
+                        final dataSiswa =
+                            modelview.siswaList!.data[index].attributes;
+                        final idSiswa = modelview.siswaList!.data[index].id;
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -71,7 +70,7 @@ class _DaftarSiswaState extends State<DaftarSiswa> {
                                     children: [
                                       CircleAvatar(
                                         backgroundImage:
-                                            NetworkImage(fotoProfile),
+                                            NetworkImage(dataSiswa.fotoProfile),
                                         radius: 27,
                                       ),
                                       const SizedBox(width: 5),
@@ -79,7 +78,7 @@ class _DaftarSiswaState extends State<DaftarSiswa> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          Text("Nama: $studentName"),
+                                          Text("Nama: ${dataSiswa.namaSiswa}"),
                                           Text("Nis : 007139243$idSiswa"),
                                         ],
                                       ),
@@ -87,7 +86,8 @@ class _DaftarSiswaState extends State<DaftarSiswa> {
                                   ),
                                   IconButton(
                                     onPressed: () async {
-                                      await modelview.siswaById(idSiswa);
+                                         await modelview.siswaById(idSiswa);
+                                  //    await service.fetchDataSiswaById(idSiswa);
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(

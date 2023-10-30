@@ -10,27 +10,56 @@ void main() async {
   final loginViewModel = LoginViewModel();
   final siswaViewModel = SiswaViewModel();
   final beritaViewModel = BeritaViewModel();
-  runApp(MultiProvider(
-    providers: [
-      ChangeNotifierProvider(create: (_) => LoginViewModel()),
-      ChangeNotifierProvider(create: (_) => AiViewModel()),
-      ChangeNotifierProvider(create: (_) => SiswaViewModel()),
-      ChangeNotifierProvider(create: (_) => BeritaViewModel()),
-    ],
-    child: const MyApp(),
-  ));
+  runApp(
+   const MyApp()
+  //   MultiProvider(
+  //   providers: [
+      
+  //     ChangeNotifierProvider(create: (_) => LoginViewModel()),
+  //     ChangeNotifierProvider(create: (_) => AiViewModel()),
+  //     ChangeNotifierProvider(create: (_) => SiswaViewModel()),
+  //     ChangeNotifierProvider(create: (_) => BeritaViewModel()),
+  //   ],
+  //   child: const MyApp(),
+  // )
+  );
 
   await beritaViewModel.berita();
   await siswaViewModel.dataSiswa();
   await loginViewModel.checkSharedPreferences();
 }
 
+// class MyApp extends StatelessWidget {
+//   const MyApp({super.key});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       theme: ThemeData(
+//         brightness: Brightness.light,
+//         appBarTheme: const AppBarTheme(
+//           backgroundColor: Color(0xFF21ABA5),
+//         ),
+//       ),
+//       debugShowCheckedModeBanner: false,
+//       home: const LoginScreen(),
+//     );
+//   }
+// }
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return   MultiProvider(
+    providers: [
+      
+      ChangeNotifierProvider(create: (_) => LoginViewModel()),
+      ChangeNotifierProvider(create: (_) => AiViewModel()),
+      ChangeNotifierProvider(create: (_) => SiswaViewModel()),
+      ChangeNotifierProvider(create: (_) => BeritaViewModel()),
+    ],
+    child:   MaterialApp(
       theme: ThemeData(
         brightness: Brightness.light,
         appBarTheme: const AppBarTheme(
@@ -39,6 +68,8 @@ class MyApp extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
       home: const LoginScreen(),
-    );
+    )
+  );
+  
   }
 }

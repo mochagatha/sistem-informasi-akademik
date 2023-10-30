@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:mini_project_agatha/utils/urls.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'view_model_berita.dart';
+import 'view_model_siswa.dart';
+
 class LoginViewModel with ChangeNotifier {
   final TextEditingController email = TextEditingController();
   final TextEditingController password = TextEditingController();
@@ -18,7 +21,13 @@ class LoginViewModel with ChangeNotifier {
   int currentIndex = 1;
   final Dio _dio = Dio();
   String gagalUbahPassword = 'Gagal Update Password';
-   String berhasilUbahPassword = 'Berhasil Update Password';
+  String berhasilUbahPassword = 'Berhasil Update Password';
+  final siswaViewModel = SiswaViewModel();
+  final beritaViewModel = BeritaViewModel();
+  bool isPasswordVisible = false;
+  bool isPasswordLama = false;
+  bool isPasswordBaru = false;
+  bool isKonfirmasiPassword = false;
 
   LoginViewModel() {
     checkSharedPreferences();
@@ -33,12 +42,13 @@ class LoginViewModel with ChangeNotifier {
         },
       );
       if (response.statusCode == 200) {
+        await beritaViewModel.berita();
+        await siswaViewModel.dataSiswa();
         final responseData = response.data['user'];
         token = response.data['jwt'];
         name = responseData['username'];
         nip = responseData['nip'];
         fotoProfileUser = responseData['foto_profile'];
-
         final prefs = await SharedPreferences.getInstance();
         prefs.setString('jwt', token);
         prefs.setString('username', name);
@@ -81,27 +91,75 @@ class LoginViewModel with ChangeNotifier {
       'passwordConfirmation': konfirmasiPassword.text
     };
 
-  try {
-    Response response = await _dio.post(
-      Urls.baseUrl + Urls.gantiPassword,
-      data: data,
-    );
+    try {
+      Response response = await _dio.post(
+        Urls.baseUrl + Urls.gantiPassword,
+        data: data,
+      );
 
-    if (response.statusCode == 200) {
-      debugPrint('Password berhasil diubah');
-      return true;
-    } else {
-      debugPrint('Gagal mengubah password. Status code: ${response.statusCode}');
+      if (response.statusCode == 200) {
+        debugPrint('Password berhasil diubah');
+        return true;
+      } else {
+        debugPrint(
+            'Gagal mengubah password. Status code: ${response.statusCode}');
+        return false;
+      }
+    } catch (error) {
+      debugPrint('Terjadi kesalahan: $error');
       return false;
     }
-  } catch (error) {
-    debugPrint('Terjadi kesalahan: $error');
-    return false;
   }
-}
+
+  String? validatePasswordBaru(String value) {
+    if (value.isEmpty) {
+      return 'Password tidak boleh kosong';
+    } else if (value.length < 8) {
+      return 'Password harus memiliki setidaknya 8 karakter';
+    } else if (!RegExp(r'^(?=.*[a-zA-Z])(?=.*\d).+$').hasMatch(value)) {
+      return 'Password harus berupa kombinasi huruf dan angka';
+    }
+    return null;
+  }
+
+  String? validateKonfirmasiPassword(String value) {
+    if (value.isEmpty) {
+      return 'Konfirmasi password tidak boleh kosong';
+    } else if (value != passwordBaru.text) {
+      return 'Password tidak sama';
+    }
+    return null;
+  }
 
   void changeIndex(int newIndex) {
     currentIndex = newIndex;
+    notifyListeners();
+  }
+
+  void togglePasswordVisibility() {
+    isPasswordVisible = !isPasswordVisible;
+    notifyListeners();
+  }
+
+  void togglePasswordLamaVisibility() {
+    isPasswordLama = !isPasswordLama;
+    notifyListeners();
+  }
+
+  void togglePasswordBaruVisibility() {
+    isPasswordBaru = !isPasswordBaru;
+    notifyListeners();
+  }
+
+  void toggleKonfirmasiPasswordVisibility() {
+    isKonfirmasiPassword = !isKonfirmasiPassword;
+    notifyListeners();
+  }
+
+  void hapus() {
+    passwordLama.clear();
+    passwordBaru.clear();
+    konfirmasiPassword.clear();
     notifyListeners();
   }
 }

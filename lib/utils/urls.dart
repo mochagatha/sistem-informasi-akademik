@@ -1,5 +1,5 @@
 class Urls {
-  static const String baseUrl = "https://e867-140-0-37-211.ngrok-free.app";
+  static const String baseUrl = "https://strapi-postgresql-sistem-informasi.onrender.com";
   static const String authUrl = "/api/auth/local";
   static const String student = "/api/students?populate=*";
   static const String addNilai = "/api/students/";

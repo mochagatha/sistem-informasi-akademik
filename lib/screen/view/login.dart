@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously, avoid_print
+// ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
@@ -53,55 +53,21 @@ class _LoginScreenState extends State<LoginScreen> {
             key: modelview.formKey,
             child: Column(
               children: [
-                Image.network(
-                  "https://pbs.twimg.com/profile_images/1511509601283633153/DCyd2t_r_400x400.jpg",
-                  width: 200.0,
-                  height: 200.0,
-                  fit: BoxFit.cover,
+                Image.asset(
+                "assets/logo.png",
+                width: 200,
+                height: 200,
+                fit: BoxFit.fill,
                 ),
                 const SizedBox(height: 30),
+     
                 TextFormField(
                   controller: modelview.email,
-                                 decoration: InputDecoration(
-                      filled: true,
-                      fillColor: const Color(0xFFFAF9F9),
-                      contentPadding: const EdgeInsets.all(16),
-                      hintText: 'Email',
-                      hintStyle: const TextStyle(
-                        color: Color(0xFF999999),
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(35),
-                        borderSide: const BorderSide(color: Colors.black),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(35),
-                        borderSide: const BorderSide(color: Colors.black),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(35),
-                        borderSide: const BorderSide(color: Colors.black),
-                      ),
-                    ),
-                  validator: (email) {
-                    if (email != null && !EmailValidator.validate(email)) {
-                      return 'Enter a valid email';
-                    } else {
-                      return null; 
-                    }
-                  },
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                TextFormField(
-                  controller: modelview.password,
-                  obscureText: true,
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: const Color(0xFFFAF9F9),
                     contentPadding: const EdgeInsets.all(16),
-                    hintText: 'Password',
+                    hintText: 'Email',
                     hintStyle: const TextStyle(
                       color: Color(0xFF999999),
                     ),
@@ -118,28 +84,56 @@ class _LoginScreenState extends State<LoginScreen> {
                       borderSide: const BorderSide(color: Colors.black),
                     ),
                   ),
+                  validator: (email) {
+                    if (email != null && !EmailValidator.validate(email)) {
+                      return 'Enter a valid email';
+                    } else {
+                      return null;
+                    }
+                  },
                 ),
-                // ElevatedButton(
-                //   onPressed: () async {
-                //     // modelview.getData();
-                //     final email = modelview.email.text;
-                //     final password = modelview.password.text;
-
-                //     if (await modelview.login(email, password)) {
-                //       print("Login berhasil");
-                //       logindata.setBool('login', false);
-                //       Navigator.pushAndRemoveUntil(
-                //           context,
-                //           MaterialPageRoute(
-                //             builder: (context) => BottomNavScreen(),
-                //           ),
-                //           (route) => false);
-                //     } else {
-                //       print('Gagal login');
-                //     }
-                //   },
-                //   child: Text('Login'),
-                // )
+                const SizedBox(
+                  height: 10,
+                ),
+                Consumer<LoginViewModel>(
+                  builder: (context, contactModel, child) {
+                    return TextFormField(
+                      controller: modelview.password,
+                      obscureText: !modelview.isPasswordVisible,
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: const Color(0xFFFAF9F9),
+                        contentPadding: const EdgeInsets.all(16),
+                        hintText: 'Password',
+                        hintStyle: const TextStyle(
+                          color: Color(0xFF999999),
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(35),
+                          borderSide: const BorderSide(color: Colors.black),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(35),
+                          borderSide: const BorderSide(color: Colors.black),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(35),
+                          borderSide: const BorderSide(color: Colors.black),
+                        ),
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            modelview.isPasswordVisible
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                          ),
+                          onPressed: () {
+                            modelview.togglePasswordVisibility();
+                          },
+                        ),
+                      ),
+                    );
+                  },
+                ),
                 const SizedBox(height: 30),
                 Ink(
                   decoration: ShapeDecoration(
@@ -154,7 +148,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       final password = modelview.password.text;
 
                       if (await modelview.login(email, password)) {
-                        print("Login berhasil");
+                        debugPrint("Login berhasil");
+                        modelview.email.clear();
+                        modelview.password.clear();
                         logindata.setBool('login', false);
                         Navigator.pushAndRemoveUntil(
                           context,
@@ -164,12 +160,16 @@ class _LoginScreenState extends State<LoginScreen> {
                           (route) => false,
                         );
                       } else {
-                        print('Gagal login');
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Gagal login'),
+                            duration: Duration(seconds: 2),
+                          ),
+                        );
                       }
                     },
                     child: Container(
-                      // width: 349,
-                      height: 64,
+                      height: 50,
                       alignment: Alignment.center,
                       child: const Text(
                         'Login',

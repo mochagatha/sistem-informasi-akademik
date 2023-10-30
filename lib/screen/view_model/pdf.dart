@@ -20,7 +20,7 @@ Future<void> printPDF(
                 pw.Column(
                   crossAxisAlignment: pw.CrossAxisAlignment.start,
                   children: [
-                    pw.Text("Nama Sekolah: SMPN 1 BOURNO"),
+                    pw.Text("Nama Sekolah: SMPN 1 BAURENO"),
                     pw.Text("Alamat: Bojonegoro"),
                     pw.Text("Nama: $nama"),
                   ],
@@ -36,7 +36,6 @@ Future<void> printPDF(
               ],
             ),
             pw.Divider(),
-            pw.Text("A. PENGETAHUAN"),
             pw.SizedBox(height: 3),
             pw.Table(
               border: pw.TableBorder.all(),
@@ -173,10 +172,8 @@ Future<void> printPDF(
     ),
   );
 
-  // Generate a PDF file
   final pdfBytes = await pdf.save();
 
-  // Print the PDF
   Printing.layoutPdf(
     onLayout: (PdfPageFormat format) async => pdfBytes,
   );

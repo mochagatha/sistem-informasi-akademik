@@ -1,11 +1,9 @@
+// ignore_for_file: sort_child_properties_last
+
 import 'package:flutter/material.dart';
-// import 'package:mini_project_agatha/screen/view/login.dart';
 import 'package:mini_project_agatha/screen/view_model/view_model_login.dart';
 import 'package:provider/provider.dart';
-// import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-// import '../view_model/view_model_login.dart';
 
 class Setting extends StatefulWidget {
   const Setting({Key? key}) : super(key: key);
@@ -25,42 +23,45 @@ class _SettingState extends State<Setting> {
   void initial() async {
     logindata = await SharedPreferences.getInstance();
   }
+
   void _showErrorDialog(String errorMessage) {
     showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Peringatan!'),
-          content: Text(errorMessage),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('OK'),
-            ),
-          ],
-        );
-      });
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Peringatan!'),
+            content: Text(errorMessage),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        });
   }
-    void _showSuccessDialog(String berhasilUbahPassword) {
+
+  void _showSuccessDialog(String berhasilUbahPassword) {
     showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Berhasil!!!'),
-          content: Text(berhasilUbahPassword),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('OK'),
-            ),
-          ],
-        );
-      });
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Berhasil'),
+            content: Text(berhasilUbahPassword),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        });
   }
+
   @override
   Widget build(BuildContext context) {
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -90,98 +91,188 @@ class _SettingState extends State<Setting> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              Form(
-                key: formKey,
-                child: Column(
-                  children: [
-                    TextFormField(
-                      controller: modelview.passwordLama,
-                      maxLength: 20,
-                      decoration: const InputDecoration(
-                        labelText: 'Password Lama',
-                        labelStyle: TextStyle(
-                          color: Colors.blueGrey,
+              const SizedBox(height: 20),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Reset Password',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  Form(
+                    key: formKey,
+                    child: Column(
+                      children: [
+                        Consumer<LoginViewModel>(
+                          builder: (context, contactModel, child) {
+                            return TextFormField(
+                              obscureText: !modelview.isPasswordLama,
+                              controller: modelview.passwordLama,
+                              decoration: InputDecoration(
+                                filled: true,
+                                fillColor: const Color(0xFFFAF9F9),
+                                contentPadding: const EdgeInsets.all(16),
+                                hintText: 'Password Lama',
+                                hintStyle: const TextStyle(
+                                  color: Color(0xFF999999),
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(35),
+                                  borderSide:
+                                      const BorderSide(color: Colors.black),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(35),
+                                  borderSide:
+                                      const BorderSide(color: Colors.black),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(35),
+                                  borderSide:
+                                      const BorderSide(color: Colors.black),
+                                ),
+                                suffixIcon: IconButton(
+                                  icon: Icon(
+                                    modelview.isPasswordLama
+                                        ? Icons.visibility
+                                        : Icons.visibility_off,
+                                  ),
+                                  onPressed: () {
+                                    modelview.togglePasswordLamaVisibility();
+                                  },
+                                ),
+                              ),
+                            );
+                          },
                         ),
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.blueGrey,
+                        const SizedBox(height: 20),
+                        Consumer<LoginViewModel>(
+                          builder: (context, contactModel, child) {
+                            return TextFormField(
+                              obscureText: !modelview.isPasswordBaru,
+                              controller: modelview.passwordBaru,
+                              decoration: InputDecoration(
+                                filled: true,
+                                fillColor: const Color(0xFFFAF9F9),
+                                contentPadding: const EdgeInsets.all(16),
+                                hintText: 'Password Baru',
+                                hintStyle: const TextStyle(
+                                  color: Color(0xFF999999),
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(35),
+                                  borderSide:
+                                      const BorderSide(color: Colors.black),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(35),
+                                  borderSide:
+                                      const BorderSide(color: Colors.black),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(35),
+                                  borderSide:
+                                      const BorderSide(color: Colors.black),
+                                ),
+                                suffixIcon: IconButton(
+                                  icon: Icon(
+                                    modelview.isPasswordBaru
+                                        ? Icons.visibility
+                                        : Icons.visibility_off,
+                                  ),
+                                  onPressed: () {
+                                    modelview.togglePasswordBaruVisibility();
+                                  },
+                                ),
+                              ),
+                              validator: (value) =>
+                                  modelview.validatePasswordBaru(value!),
+                            );
+                          },
+                        ),
+                        const SizedBox(height: 2),
+                        Consumer<LoginViewModel>(
+                          builder: (context, contactModel, child) {
+                            return TextFormField(
+                              obscureText: !modelview.isKonfirmasiPassword,
+                              controller: modelview.konfirmasiPassword,
+                              decoration: InputDecoration(
+                                filled: true,
+                                fillColor: const Color(0xFFFAF9F9),
+                                contentPadding: const EdgeInsets.all(16),
+                                hintText: 'Konfirmasi Password-Baru',
+                                hintStyle: const TextStyle(
+                                  color: Color(0xFF999999),
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(35),
+                                  borderSide:
+                                      const BorderSide(color: Colors.black),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(35),
+                                  borderSide:
+                                      const BorderSide(color: Colors.black),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(35),
+                                  borderSide:
+                                      const BorderSide(color: Colors.black),
+                                ),
+                                suffixIcon: IconButton(
+                                  icon: Icon(
+                                    modelview.isKonfirmasiPassword
+                                        ? Icons.visibility
+                                        : Icons.visibility_off,
+                                  ),
+                                  onPressed: () {
+                                    modelview
+                                        .toggleKonfirmasiPasswordVisibility();
+                                  },
+                                ),
+                              ),
+                              validator: (value) =>
+                                  modelview.validateKonfirmasiPassword(value!),
+                            );
+                          },
+                        ),
+                        const SizedBox(height: 10),
+                        ElevatedButton(
+                          onPressed: () async {
+                            if (formKey.currentState!.validate()) {
+                              bool success = await modelview.changePassword();
+                              if (!success) {
+                                _showErrorDialog(modelview.gagalUbahPassword);
+                              } else if (success) {
+                                _showSuccessDialog(
+                                    modelview.berhasilUbahPassword);
+                                modelview.hapus();
+                              }
+                            }
+                          },
+                          child: const Text("Reset"),
+                                  style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all<Color>(const Color(0xFF21ABA5)),
+                        shape: MaterialStateProperty.all<OutlinedBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16.0),
                           ),
                         ),
                       ),
+                        )
+                      ],
                     ),
-                    TextFormField(
-                      controller: modelview.passwordBaru,
-                      decoration: const InputDecoration(
-                        labelText: 'Password Baru',
-                        labelStyle: TextStyle(
-                          color: Colors.blueGrey,
-                        ),
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.blueGrey,
-                          ),
-                        ),
-                      ),
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Password tidak boleh kosong';
-                        } else if (value.length < 8) {
-                          return 'Password harus memiliki setidaknya 8 karakter';
-                        } else if (!RegExp(r'^(?=.*[a-zA-Z])(?=.*\d).+$')
-                            .hasMatch(value)) {
-                          return 'Password harus berupa kombinasi huruf dan angka';
-                        }
-                        return null;
-                      },
-                    ),
-                    TextFormField(
-                      controller: modelview.konfirmasiPassword,
-                      decoration: const InputDecoration(
-                        labelText: 'Konfirmasi Password-Baru',
-                        labelStyle: TextStyle(
-                          color: Colors.blueGrey,
-                        ),
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.blueGrey,
-                          ),
-                        ),
-                      ),
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Konfirmasi password tidak boleh kosong';
-                        } else if (value != modelview.passwordBaru.text) {
-                          return 'Password tidak sama';
-                        }
-                        return null;
-                      },
-                    ),
-            ElevatedButton(
-  onPressed: () async {
-    if (formKey.currentState!.validate()) {
-      bool success = await modelview.changePassword();
-      if (!success) {
-        _showErrorDialog(modelview.gagalUbahPassword);
-      }
-       else if (success) {
-        _showSuccessDialog(modelview.berhasilUbahPassword);
-      }
-    }
-  },
-  child: const Text("Ubah Password"),
-)
-
-                  ],
-                ),
-              )
+                  )
+                ],
+              ),
             ],
           ),
         ),
-        
       ),
-      
     );
-    
   }
-  
 }
