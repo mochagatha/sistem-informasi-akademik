@@ -5,7 +5,6 @@ import 'package:email_validator/email_validator.dart';
 import 'package:mini_project_agatha/screen/view/nav_bottom.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../view_model/view_model_login.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -54,13 +53,12 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               children: [
                 Image.asset(
-                "assets/logo.png",
-                width: 200,
-                height: 200,
-                fit: BoxFit.fill,
+                  "assets/logo.png",
+                  width: 200,
+                  height: 200,
+                  fit: BoxFit.fill,
                 ),
                 const SizedBox(height: 30),
-     
                 TextFormField(
                   controller: modelview.email,
                   decoration: InputDecoration(
@@ -135,51 +133,58 @@ class _LoginScreenState extends State<LoginScreen> {
                   },
                 ),
                 const SizedBox(height: 30),
-                Ink(
-                  decoration: ShapeDecoration(
-                    color: const Color(0xFF2DBAB1),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                  ),
-                  child: InkResponse(
-                    onTap: () async {
-                      final email = modelview.email.text;
-                      final password = modelview.password.text;
-
-                      if (await modelview.login(email, password)) {
-                        debugPrint("Login berhasil");
-                        modelview.email.clear();
-                        modelview.password.clear();
-                        logindata.setBool('login', false);
-                        Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const BottomNavScreen(),
-                          ),
-                          (route) => false,
-                        );
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Gagal login'),
-                            duration: Duration(seconds: 2),
-                          ),
-                        );
-                      }
-                    },
-                    child: Container(
-                      height: 50,
-                      alignment: Alignment.center,
-                      child: const Text(
-                        'Login',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
+                Consumer<LoginViewModel>(
+                  builder: (context, modelview, child) {
+                    return Ink(
+                      decoration: ShapeDecoration(
+                        color: const Color(0xFF2DBAB1),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
                         ),
                       ),
-                    ),
-                  ),
+                      child: InkResponse(
+                        onTap: () async {
+                          modelview.isLoading = true;
+                          final email = modelview.email.text;
+                          final password = modelview.password.text;
+                          if (await modelview.login(email, password)) {
+                            debugPrint("Login berhasil");
+                            modelview.email.clear();
+                            modelview.password.clear();
+                            logindata.setBool('login', false);
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const BottomNavScreen(),
+                              ),
+                              (route) => false,
+                            );
+                          } else {
+                            modelview.isLoading = false;
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Gagal login'),
+                                duration: Duration(seconds: 2),
+                              ),
+                            );
+                          }
+                        },
+                        child: Container(
+                          height: 50,
+                          alignment: Alignment.center,
+                          child: modelview.isLoading
+                              ? const CircularProgressIndicator()
+                              : const Text(
+                                  'Login',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                  ),
+                                ),
+                        ),
+                      ),
+                    );
+                  },
                 )
               ],
             ),

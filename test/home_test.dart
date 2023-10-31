@@ -32,7 +32,7 @@ void main() {
         providers: [
           ChangeNotifierProvider(create: (_) => viewModel),
         ],
-        child: MaterialApp(
+        child: const MaterialApp(
           home: HomeScreen(),
         ),
       ),

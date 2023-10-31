@@ -15,6 +15,12 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   @override
+  void initState() {
+    final beritaViewModel = BeritaViewModel();
+    beritaViewModel.berita();
+    super.initState();
+  }
+  @override
   Widget build(BuildContext context) {
     final modelview = Provider.of<BeritaViewModel>(context, listen: false);
     double screenHeight = MediaQuery.of(context).size.height - kToolbarHeight;

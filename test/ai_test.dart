@@ -22,8 +22,8 @@ void main() {
         providers: [
           ChangeNotifierProvider(create: (_) => viewModel),
         ],
-        child: MaterialApp(
-          home: const Ai(),
+        child: const MaterialApp(
+          home: Ai(),
         ),
       ),
     );

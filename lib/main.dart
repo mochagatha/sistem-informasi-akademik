@@ -12,40 +12,11 @@ void main() async {
   final beritaViewModel = BeritaViewModel();
   runApp(
    const MyApp()
-  //   MultiProvider(
-  //   providers: [
-      
-  //     ChangeNotifierProvider(create: (_) => LoginViewModel()),
-  //     ChangeNotifierProvider(create: (_) => AiViewModel()),
-  //     ChangeNotifierProvider(create: (_) => SiswaViewModel()),
-  //     ChangeNotifierProvider(create: (_) => BeritaViewModel()),
-  //   ],
-  //   child: const MyApp(),
-  // )
   );
-
   await beritaViewModel.berita();
   await siswaViewModel.dataSiswa();
   await loginViewModel.checkSharedPreferences();
 }
-
-// class MyApp extends StatelessWidget {
-//   const MyApp({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       theme: ThemeData(
-//         brightness: Brightness.light,
-//         appBarTheme: const AppBarTheme(
-//           backgroundColor: Color(0xFF21ABA5),
-//         ),
-//       ),
-//       debugShowCheckedModeBanner: false,
-//       home: const LoginScreen(),
-//     );
-//   }
-// }
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 

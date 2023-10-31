@@ -18,9 +18,8 @@ class SiswaViewModel with ChangeNotifier {
   bool isLoading = true;
   final formKey = GlobalKey<FormState>();
 
-
   final service = SiswaApiService();
-   DaftarSiswaModel? siswaList;
+  DaftarSiswaModel? siswaList;
   SiswaViewModel() {
     dataSiswa();
   }
@@ -31,7 +30,7 @@ class SiswaViewModel with ChangeNotifier {
       final data = await service.fetchDataSiswa();
       siswaList = data;
     } catch (error) {
-       throw Exception('Gagal mengambil data dari API: $error');
+      throw Exception('Gagal mengambil data dari API: $error');
     }
     isLoading = false;
     notifyListeners();
@@ -58,12 +57,9 @@ class SiswaViewModel with ChangeNotifier {
 
     try {
       Response response = await _dio.put(apiUrl, data: requestBody);
-
-      // Cek status kode respons
       if (response.statusCode == 200) {
         siswaById(idSiswa);
         await dataSiswa();
-
         notifyListeners();
       } else {
         debugPrint(
@@ -82,9 +78,7 @@ class SiswaViewModel with ChangeNotifier {
         baseUrl: Urls.baseUrl,
       );
       dio.options = options;
-
       final response = await dio.get(Urls.addNilai + idSiswa.toString());
-
       if (response.statusCode == 200) {
         final data = response.data;
         studentDataID = data;
@@ -102,7 +96,8 @@ class SiswaViewModel with ChangeNotifier {
     isEditMode = !isEditMode;
     notifyListeners();
   }
-    String? validateNilai(String value) {
+
+  String? validateNilai(String value) {
     if (value.isNotEmpty) {
       final intValue = int.tryParse(value);
       if (intValue == null || intValue < 0 || intValue > 100) {

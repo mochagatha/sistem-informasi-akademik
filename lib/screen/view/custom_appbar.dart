@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mini_project_agatha/screen/view/login.dart';
 import 'package:mini_project_agatha/screen/view/setting.dart';
-// import 'package:mini_project_agatha/screen/view/setting.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../view_model/view_model_login.dart';
 
 class CustomAppBar extends StatefulWidget {
@@ -81,12 +79,6 @@ class _CustomAppBarState extends State<CustomAppBar> {
             ),
             IconButton(
               onPressed: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (context) => const Setting(),
-                //   ),
-                // );
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
@@ -111,6 +103,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                                   builder: (context) => const LoginScreen(),
                                 ),
                                 (route) => false);
+                                modelview.isLoading = false;
                                 modelview.currentIndex = 1;
                           },
                         ),

@@ -28,6 +28,8 @@ class LoginViewModel with ChangeNotifier {
   bool isPasswordLama = false;
   bool isPasswordBaru = false;
   bool isKonfirmasiPassword = false;
+  bool isLoading = false;
+
 
   LoginViewModel() {
     checkSharedPreferences();
@@ -41,6 +43,8 @@ class LoginViewModel with ChangeNotifier {
           'password': password,
         },
       );
+
+      notifyListeners();
       if (response.statusCode == 200) {
         await beritaViewModel.berita();
         await siswaViewModel.dataSiswa();
@@ -54,8 +58,7 @@ class LoginViewModel with ChangeNotifier {
         prefs.setString('username', name);
         prefs.setString('nip', nip);
         prefs.setString('foto_profile', fotoProfileUser);
-
-        // print('Username: $username');
+        isLoading = false;
         notifyListeners();
         return true;
       } else {
