@@ -8,7 +8,7 @@ class AiViewModel with ChangeNotifier {
    bool isLoading = false;
 
   Future<void> makeApiRequest(BuildContext context) async {
-    const authToken = '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';
+    const authToken = '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';
 
     _dio.options = BaseOptions(
       baseUrl: 'https://api.openai.com/v1/',

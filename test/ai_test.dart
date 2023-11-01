@@ -17,10 +17,10 @@ void main() {
       ),
     );
     // Find the Container widget.
-    final container = find.byType(Container);
+    final consumer = find.byType(Consumer<AiViewModel>);
 
     // Verify that the Container is displayed.
-    expect(container, findsWidgets);
+    expect(consumer, findsOneWidget);
 
   });
 }
