@@ -11,7 +11,6 @@ class Ai extends StatelessWidget {
     final modelview = Provider.of<AiViewModel>(context, listen: false);
     double screenHeight = MediaQuery.of(context).size.height - kToolbarHeight;
     return Scaffold(
-      // appBar:CustomAppBar(),
       body: SingleChildScrollView(
         child: Container(
           color: const Color(0xFF21ABA5),
@@ -60,7 +59,7 @@ class Ai extends StatelessWidget {
                                     child: contactModel.isLoading
                                         ? const Center(
                                             child:
-                                                CircularProgressIndicator(), // Menampilkan indikator progres saat isLoading adalah true
+                                                CircularProgressIndicator(),
                                           )
                                         : ListView.builder(
                                             itemCount: modelview.dataAi.length,

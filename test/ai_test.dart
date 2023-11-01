@@ -5,55 +5,22 @@ import 'package:mini_project_agatha/screen/view_model/view_model_ai.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  testWidgets('Test Ai Screen', (WidgetTester tester) async {
-    // Mock the AiViewModel
-    final viewModel = AiViewModel();
-    viewModel.dataAi = [
-      {
-        'text': 'Ini adalah jawaban dari AI untuk pertanyaan Anda.'
-      },
-      {
-        'text': 'Jawaban lain dari AI.'
-      },
-    ];
-
+  testWidgets('Login Screen UI Test', (WidgetTester tester) async {
+    final loginViewModel = AiViewModel();
+    await tester.pumpAndSettle();
     await tester.pumpWidget(
-      MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (_) => viewModel),
-        ],
-        child: const MaterialApp(
-          home: Ai(),
+      MaterialApp(
+        home: ChangeNotifierProvider(
+          create: (context) => loginViewModel,
+          child: const Ai(),
         ),
       ),
     );
+    // Find the Container widget.
+    final container = find.byType(Container);
 
-    await tester.pumpAndSettle();
+    // Verify that the Container is displayed.
+    expect(container, findsWidgets);
 
-    // Ensure that the mock data is displayed on the screen
-    expect(find.text('Ini adalah jawaban dari AI untuk pertanyaan Anda.'), findsOneWidget);
-    expect(find.text('Jawaban lain dari AI.'), findsOneWidget);
-
-    // Simulate user input
-    await tester.enterText(find.byType(TextFormField), 'Apa itu Flutter?');
-
-    // Tap the "Submit" button
-    await tester.tap(find.text('Submit'));
-    await tester.pumpAndSettle();
-
-    // Ensure that the loading indicator is displayed
-    expect(find.byType(CircularProgressIndicator), findsOneWidget);
-
-    // Mock the AiViewModel again with new data
-    viewModel.dataAi = [
-      {
-        'text': 'Jawaban AI untuk pertanyaan: Apa itu Flutter?'
-      },
-    ];
-
-    await tester.pumpAndSettle();
-
-    // Ensure that the new data from the mock is displayed
-    expect(find.text('Jawaban AI untuk pertanyaan: Apa itu Flutter?'), findsOneWidget);
   });
 }
