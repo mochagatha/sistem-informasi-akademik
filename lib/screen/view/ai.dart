@@ -56,12 +56,7 @@ class Ai extends StatelessWidget {
                               Consumer<AiViewModel>(
                                 builder: (context, contactModel, child) {
                                   return Expanded(
-                                    child: contactModel.isLoading
-                                        ? const Center(
-                                            child:
-                                                CircularProgressIndicator(),
-                                          )
-                                        : ListView.builder(
+                                    child: ListView.builder(
                                             itemCount: modelview.dataAi.length,
                                             itemBuilder: (context, index) {
                                               return ListTile(
@@ -98,12 +93,10 @@ class Ai extends StatelessWidget {
                                 fillColor: Color(0xFFFAF9F9),
                                 contentPadding: EdgeInsets.all(16),
                                 border: OutlineInputBorder(
-                                  borderSide:
-                                    BorderSide(color: Colors.black),
+                                  borderSide: BorderSide(color: Colors.black),
                                 ),
                                 focusedBorder: OutlineInputBorder(
-                                  borderSide:
-                                   BorderSide(color: Colors.black),
+                                  borderSide: BorderSide(color: Colors.black),
                                 ),
                                 enabledBorder: OutlineInputBorder(
                                   borderSide: BorderSide(color: Colors.black),
@@ -114,28 +107,37 @@ class Ai extends StatelessWidget {
                         ),
                       ),
                     ),
-                    ElevatedButton(
-                      onPressed: () {
-                        modelview.makeApiRequest(context);
-                        modelview.ai.clear();
-                      },
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                            const Color(0xFF21ABA5)),
-                        shape: MaterialStateProperty.all<OutlinedBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16.0),
+                    Consumer<AiViewModel>(
+                      builder: (context, contactModel, child) {
+                        if (modelview.isLoading) {
+                          return const CircularProgressIndicator();
+                        }
+                        final ambilSemuaData = modelview.keyAi['data'][0];
+                        final key = ambilSemuaData['attributes']['key'] ?? "";
+                        return ElevatedButton(
+                          onPressed: () {
+                            modelview.makeApiRequest(context, key);
+                            modelview.ai.clear();
+                          },
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                                const Color(0xFF21ABA5)),
+                            shape: MaterialStateProperty.all<OutlinedBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16.0),
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                      child: const Text(
-                        'Submit',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    )
+                          child: const Text(
+                            'Submit',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
                   ],
                 ),
               ),

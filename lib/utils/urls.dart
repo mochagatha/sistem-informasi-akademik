@@ -5,4 +5,5 @@ class Urls {
   static const String addNilai = "/api/students/";
   static const String berita = "/api/news";
   static const String gantiPassword = "/api/auth/change-password";
+  static const String tokenGetAi = "/api/ais";
 }

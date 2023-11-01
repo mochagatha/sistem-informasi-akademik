@@ -1,19 +1,42 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
+import '../../utils/urls.dart';
+
 class AiViewModel with ChangeNotifier {
   final TextEditingController ai = TextEditingController();
   List<dynamic> dataAi = [];
+  Map<String, dynamic> keyAi = {};
   final Dio _dio = Dio();
-   bool isLoading = false;
+   bool isLoading = true;
 
-  Future<void> makeApiRequest(BuildContext context) async {
-    const authToken = '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';
+  AiViewModel() {
+    tokenAI();
+  }
+  Future<void> tokenAI () async {
+    try {
+      final response = await _dio.get(Urls.baseUrl + Urls.tokenGetAi);
+
+      if (response.statusCode == 200) {
+        final data = response.data;
+        keyAi = data;
+        isLoading = false;
+      } else {
+        debugPrint('Gagal mengambil data. Status Code: ${response.statusCode}');
+      }
+    } catch (error) {
+      debugPrint('Terjadi kesalahan saat mengambil data: $error');
+    }
+  notifyListeners();
+  }
+
+  Future<void> makeApiRequest(BuildContext context, String key) async {
+    // const authToken = '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';
 
     _dio.options = BaseOptions(
       baseUrl: 'https://api.openai.com/v1/',
       headers: {
-        'Authorization': 'Bearer $authToken',
+        'Authorization': 'Bearer $key',
       },
     );
     

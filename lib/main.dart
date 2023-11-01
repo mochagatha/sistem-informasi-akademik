@@ -10,12 +10,14 @@ void main() async {
   final loginViewModel = LoginViewModel();
   final siswaViewModel = SiswaViewModel();
   final beritaViewModel = BeritaViewModel();
+  final ai = AiViewModel();
   runApp(
    const MyApp()
   );
   await beritaViewModel.berita();
   await siswaViewModel.dataSiswa();
   await loginViewModel.checkSharedPreferences();
+  await ai.tokenAI();
 }
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
